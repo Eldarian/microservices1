@@ -35,8 +35,7 @@ public class Mp3FileService {
      * @param file MultipartFile to process
      * @return file id in resource db.
      */
-    public long processMp3File(MultipartFile file) throws IllegalArgumentException, TikaException, SAXException {
-        try {
+    public long processMp3File(MultipartFile file) throws IOException, TikaException, SAXException {
             Mp3File mp3File = new Mp3File();
             byte[] fileData = file.getBytes();
 
@@ -46,9 +45,6 @@ public class Mp3FileService {
             String result = getMetadata(fileData, fileId);
             sendMetadata(result);
             return fileId;
-        } catch (IOException e) {
-            throw new IllegalArgumentException();
-        }
     }
 
     protected String getMetadata(byte[] fileData, long resourceID) throws IOException, TikaException, SAXException {

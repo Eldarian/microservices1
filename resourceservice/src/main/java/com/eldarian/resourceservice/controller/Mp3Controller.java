@@ -3,21 +3,25 @@ package com.eldarian.resourceservice.controller;
 
 import com.eldarian.resourceservice.model.Mp3File;
 import com.eldarian.resourceservice.service.Mp3FileService;
+import org.apache.tika.exception.TikaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @RestController
 public class Mp3Controller {
 
-    @Autowired
     private Mp3FileService mp3FileService;
+
+    @Autowired
+    public Mp3Controller(Mp3FileService mp3FileService) {
+        this.mp3FileService = mp3FileService;
+    }
 
     @PostMapping("/resources")
     public ResponseEntity<String> uploadMp3(@RequestParam("file") MultipartFile file) {
@@ -28,7 +32,11 @@ public class Mp3Controller {
             long id = mp3FileService.processMp3File(file);
 
             return ResponseEntity.ok("{\"id\": " + id + "}");
-        } catch (Exception e) {
+        } catch (SAXException e) {
+            return ResponseEntity.internalServerError().body("Failed to parse metadata");
+        } catch (TikaException e) {
+            return ResponseEntity.internalServerError().body("Failed to extract metadata");
+        } catch (IOException e) {
             return ResponseEntity.internalServerError().body("Failed to read file");
         }
 
@@ -40,6 +48,11 @@ public class Mp3Controller {
         Optional<Mp3File> result = mp3FileService.findById(id);
         return result.map(mp3File -> ResponseEntity.ok(mp3File.getFileData()))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body("Invalid file");
     }
 
 }
