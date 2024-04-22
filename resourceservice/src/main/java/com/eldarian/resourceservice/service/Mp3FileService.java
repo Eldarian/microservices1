@@ -5,6 +5,8 @@ import com.eldarian.resourceservice.repository.Mp3FileRepository;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.serialization.JsonMetadata;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
 import org.apache.tika.parser.mp3.Mp3Parser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
 import java.io.*;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -56,8 +59,8 @@ public class Mp3FileService {
             Metadata metadata = new Metadata();
             try (InputStream input = new FileInputStream(tempFile)) {
                 BodyContentHandler handler = new BodyContentHandler();
-                Mp3Parser mp3Parser = new Mp3Parser();
-                mp3Parser.parse(input, handler, metadata);
+                Parser mp3Parser = new Mp3Parser();
+                mp3Parser.parse(input, handler, metadata, new ParseContext());
             }
 
             metadata.add("resourceId", String.valueOf(resourceId));
@@ -76,5 +79,13 @@ public class Mp3FileService {
 
     public Optional<Mp3File> findById(long id) {
         return mp3FileRepository.findById(id);
+    }
+
+    public void deleteById(List<Long> idList) {
+        idList.forEach(this::deleteById);
+    }
+
+    public void deleteById(long id) {
+        mp3FileRepository.deleteById(id);
     }
 }

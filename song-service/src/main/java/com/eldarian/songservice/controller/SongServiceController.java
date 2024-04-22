@@ -1,15 +1,15 @@
 package com.eldarian.songservice.controller;
 
 import com.eldarian.songservice.service.SongService;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.metadata.serialization.JsonMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.io.StringReader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RestController
 public class SongServiceController {
@@ -45,5 +45,14 @@ public class SongServiceController {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity.badRequest().body("Invalid file, " + e.getMessage());
+    }
+
+    @DeleteMapping("/songs")
+    public ResponseEntity<String> deleteMp3(@RequestParam("id") String id) {
+        List<Long> idList = Arrays.stream(id.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        songService.deleteById(idList);
+        return ResponseEntity.ok("{ids: " + idList + "}");
     }
 }

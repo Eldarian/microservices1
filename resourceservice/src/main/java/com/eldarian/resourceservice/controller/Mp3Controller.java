@@ -11,12 +11,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class Mp3Controller {
 
-    private Mp3FileService mp3FileService;
+    private final Mp3FileService mp3FileService;
 
     @Autowired
     public Mp3Controller(Mp3FileService mp3FileService) {
@@ -53,6 +56,15 @@ public class Mp3Controller {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity.badRequest().body("Invalid file");
+    }
+
+    @DeleteMapping("/resources")
+    public ResponseEntity<String> deleteMp3(@RequestParam("id") String id) {
+        List<Long> idList = Arrays.stream(id.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        mp3FileService.deleteById(idList);
+        return ResponseEntity.ok("{ids: " + idList + "}");
     }
 
 }
