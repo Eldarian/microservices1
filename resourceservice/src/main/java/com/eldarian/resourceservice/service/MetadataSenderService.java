@@ -17,19 +17,19 @@ public class MetadataSenderService {
         this.restTemplate = restTemplate;
     }
 
-    public void sendMetadata(Map<String, String> metadata, Long fileId) {
+    public void sendMetadata(String metadata, Long fileId) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(metadata, headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(metadata, headers);
 
-        // URL для отправки запроса
+        // URL for metadata sending
         String url = "http://example.com/api/metadata/" + fileId;
 
-        // Отправляем запрос и обрабатываем ответ
+        // Sending the request
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 
-        // Обработка ответа, если необходимо
+        // Processing the response if needed
         if (response.getStatusCode().is2xxSuccessful()) {
             System.out.println("Metadata sent successfully");
         } else {
