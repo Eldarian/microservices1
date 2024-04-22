@@ -10,7 +10,6 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ServerErrorException;
 import org.xml.sax.SAXException;
 
 import java.io.*;
@@ -38,7 +37,7 @@ public class Mp3FileService {
             Mp3File savedFile = mp3FileRepository.save(mp3File);
             Long fileId = savedFile.getId();
 
-            String result = "{ id:"+ fileId + "body:" + metadata + "}";
+            String result = "{ id:"+ fileId + ", body:" + metadata + " }";
 
             return fileId;
         } catch (IOException e) {
