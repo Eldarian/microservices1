@@ -5,8 +5,6 @@ import com.eldarian.resourceservice.repository.Mp3FileRepository;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.serialization.JsonMetadata;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.Parser;
 import org.apache.tika.parser.mp3.Mp3Parser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +75,7 @@ public class Mp3FileService {
 
     private void sendMetadata(String metadata) {
         System.out.println("Sending metadata: " + metadata);
-        //metadataSenderService.sendMetadata(metadata);
+        metadataSenderService.sendMetadata(metadata);
     }
 
     public Optional<Mp3File> findById(long id) {

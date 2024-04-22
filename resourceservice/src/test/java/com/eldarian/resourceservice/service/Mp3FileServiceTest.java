@@ -1,6 +1,5 @@
 package com.eldarian.resourceservice.service;
 
-import com.eldarian.resourceservice.model.Mp3File;
 import com.eldarian.resourceservice.repository.Mp3FileRepository;
 import org.apache.tika.exception.TikaException;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,18 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
 
 class Mp3FileServiceTest {
 

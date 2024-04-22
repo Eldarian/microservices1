@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @RestController
 public class SongServiceController {
 
@@ -24,6 +26,15 @@ public class SongServiceController {
 
     @GetMapping("/songs/{id}")
     public ResponseEntity<String> getSong(@RequestParam("id") Long id) {
-        return ResponseEntity.ok("Song");
+        try {
+            return ResponseEntity.ok(songService.getSongJSON(id));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body("Invalid file");
     }
 }

@@ -5,6 +5,8 @@ import com.eldarian.songservice.repository.SongRepository;
 import org.apache.tika.metadata.Metadata;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class SongService {
 
@@ -25,5 +27,10 @@ public class SongService {
         song.setDuration(Integer.parseInt(metadata.get("xmpDM:duration")));
         Song result = songRepository.save(song);
         return result.getId();
+    }
+
+    public String getSongJSON(Long id) throws NoSuchElementException {
+        Song song = songRepository.findSongById(id).orElseThrow(NoSuchElementException::new);
+        return song.toJSON();
     }
 }
