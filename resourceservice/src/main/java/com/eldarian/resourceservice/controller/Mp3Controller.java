@@ -38,7 +38,7 @@ public class Mp3Controller {
     @GetMapping("/resources/{id}")
     public ResponseEntity<byte[]> downloadMp3(@RequestParam("id") Long id) {
 
-        Optional<Mp3File> result = mp3FileRepository.findById(id);
+        Optional<Mp3File> result = mp3FileService.findById(id);
         return result.map(mp3File -> ResponseEntity.ok(mp3File.getFileData()))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

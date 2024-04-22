@@ -2,7 +2,6 @@ package com.eldarian.resourceservice.service;
 
 import com.eldarian.resourceservice.model.Mp3File;
 import com.eldarian.resourceservice.repository.Mp3FileRepository;
-import com.eldarian.resourceservice.util.Mp3MetadataExtractor;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.serialization.JsonMetadata;
@@ -15,6 +14,7 @@ import org.springframework.web.server.ServerErrorException;
 import org.xml.sax.SAXException;
 
 import java.io.*;
+import java.util.Optional;
 
 @Service
 public class Mp3FileService {
@@ -63,5 +63,9 @@ public class Mp3FileService {
 
             return writer.toString();
 
+    }
+
+    public Optional<Mp3File> findById(long id) {
+        return mp3FileRepository.findById(id);
     }
 }
