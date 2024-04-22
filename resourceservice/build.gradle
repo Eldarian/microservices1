@@ -36,3 +36,9 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+bootJar {
+	archiveFileName = 'resource-service.jar'
+	archiveVersion = '0.0.1-SNAPSHOT'
+}

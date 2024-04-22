@@ -19,8 +19,16 @@ import java.util.Optional;
 public class Mp3FileService {
 
 
+    private final Mp3FileRepository mp3FileRepository;
+    private MetadataSenderService metadataSenderService;
+
     @Autowired
-    private Mp3FileRepository mp3FileRepository;
+    public Mp3FileService(Mp3FileRepository mp3FileRepository, MetadataSenderService metadataSenderService) {
+        this.mp3FileRepository = mp3FileRepository;
+        this.metadataSenderService = metadataSenderService;
+    }
+
+
 
     /**
      * Processes MultipartFile on a service layer. Saves mp3 file to database as blob, then processes metadata
@@ -31,14 +39,11 @@ public class Mp3FileService {
         try {
             Mp3File mp3File = new Mp3File();
             byte[] fileData = file.getBytes();
-            String metadata = getMetadata(fileData);
 
             mp3File.setFileData(fileData);
             Mp3File savedFile = mp3FileRepository.save(mp3File);
             Long fileId = savedFile.getId();
-
-            String result = "{ id:"+ fileId + ", body:" + metadata + " }";
-
+            String result = getMetadata(fileData, fileId);
             sendMetadata(result);
             return fileId;
         } catch (IOException e) {
@@ -46,7 +51,7 @@ public class Mp3FileService {
         }
     }
 
-    private String getMetadata(byte[] fileData) throws IOException, TikaException, SAXException {
+    private String getMetadata(byte[] fileData, long resourceID) throws IOException, TikaException, SAXException {
             File tempFile = File.createTempFile("temp-", ".mp3");
             FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
             fileOutputStream.write(fileData);
@@ -57,6 +62,7 @@ public class Mp3FileService {
             Metadata metadata = new Metadata();
             Mp3Parser mp3Parser = new Mp3Parser();
             mp3Parser.parse(input, handler, metadata);
+            metadata.add("resourceID", String.valueOf(resourceID));
 
             StringWriter writer = new StringWriter();
             JsonMetadata.toJson(metadata, writer);
@@ -66,7 +72,7 @@ public class Mp3FileService {
     }
 
     private void sendMetadata(String metadata) {
-
+        metadataSenderService.sendMetadata(metadata);
     }
 
     public Optional<Mp3File> findById(long id) {
