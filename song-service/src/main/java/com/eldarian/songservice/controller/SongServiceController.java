@@ -1,17 +1,25 @@
 package com.eldarian.songservice.controller;
 
+import com.eldarian.songservice.service.SongService;
+import org.apache.tika.metadata.Metadata;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class SongServiceController {
 
+    SongService songService;
+
+    @Autowired
+    public SongServiceController(SongService songService) {
+        this.songService = songService;
+    }
+
     @PostMapping("/songs")
-    public ResponseEntity<String> uploadSong() {
-        return ResponseEntity.ok("Song uploaded");
+    public ResponseEntity<String> uploadSong(@RequestBody Metadata metadata) {
+        long songId = songService.processMetadata(metadata);
+        return ResponseEntity.ok("{\"id\": " + songId + "}");
     }
 
     @GetMapping("/songs/{id}")

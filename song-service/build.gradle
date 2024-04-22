@@ -16,9 +16,20 @@ repositories {
 }
 
 dependencies {
+
+    implementation('org.apache.tika:tika-core:2.9.0') {
+        exclude group: 'org.apache.logging.log4j'
+    }
+    // https://mvnrepository.com/artifact/org.apache.tika/tika-parser-audiovideo-module
+    implementation 'org.apache.tika:tika-parser-audiovideo-module:2.9.0'
+
+    // https://mvnrepository.com/artifact/org.apache.tika/tika-serialization
+    implementation 'org.apache.tika:tika-serialization:2.9.0'
+
+    implementation 'org.postgresql:postgresql:42.7.3'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
