@@ -39,6 +39,7 @@ public class Mp3FileService {
 
             String result = "{ id:"+ fileId + ", body:" + metadata + " }";
 
+            sendMetadata(result);
             return fileId;
         } catch (IOException e) {
             throw new IllegalArgumentException();
@@ -61,6 +62,10 @@ public class Mp3FileService {
             JsonMetadata.toJson(metadata, writer);
 
             return writer.toString();
+
+    }
+
+    private void sendMetadata(String metadata) {
 
     }
 
