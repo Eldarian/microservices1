@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface Mp3FileRepository extends JpaRepository<Mp3File, Long> {
-    Mp3File findByID(long id);
+    Mp3File findById(long id);
 
 }
