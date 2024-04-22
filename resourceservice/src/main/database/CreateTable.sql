@@ -1,6 +1,6 @@
-DROP TABLE mp3_files;
+DROP TABLE mp3file;
 
-CREATE TABLE mp3_files (
-                           id SERIAL PRIMARY KEY,
-                           file_data BYTEA
+CREATE TABLE mp3file (
+                id SERIAL PRIMARY KEY,
+                file_data BYTEA
 );

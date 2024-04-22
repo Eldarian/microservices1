@@ -22,6 +22,7 @@ public class Mp3Controller {
     @PostMapping("/resources")
     public ResponseEntity<String> uploadMp3(@RequestParam("file") MultipartFile file) {
         //TODO implement file validation to distinct server errors from client errors
+        System.out.println("Received file: " + file.getOriginalFilename());
         try {
 
             long id = mp3FileService.processMp3File(file);
