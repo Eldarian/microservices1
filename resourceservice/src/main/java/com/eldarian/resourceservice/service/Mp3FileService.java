@@ -53,17 +53,19 @@ public class Mp3FileService {
         }
     }
 
-    private String getMetadata(byte[] fileData, long resourceID) throws IOException, TikaException, SAXException {
+    protected String getMetadata(byte[] fileData, long resourceID) throws IOException, TikaException, SAXException {
             File tempFile = File.createTempFile("temp-", ".mp3");
-            FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
-            fileOutputStream.write(fileData);
-            fileOutputStream.close();
-
-            InputStream input = new FileInputStream(tempFile);
-            BodyContentHandler handler = new BodyContentHandler();
+            try(FileOutputStream fileOutputStream = new FileOutputStream(tempFile)) {
+                fileOutputStream.write(fileData);
+                fileOutputStream.flush();
+            }
             Metadata metadata = new Metadata();
-            Parser mp3Parser = new Mp3Parser();
-            mp3Parser.parse(input, handler, metadata, new ParseContext());
+            try (InputStream input = new FileInputStream(tempFile)) {
+                BodyContentHandler handler = new BodyContentHandler();
+                Mp3Parser mp3Parser = new Mp3Parser();
+                mp3Parser.parse(input, handler, metadata);
+            }
+
             metadata.add("resourceID", String.valueOf(resourceID));
 
             StringWriter writer = new StringWriter();
@@ -74,7 +76,8 @@ public class Mp3FileService {
     }
 
     private void sendMetadata(String metadata) {
-        metadataSenderService.sendMetadata(metadata);
+        System.out.println("Sending metadata: " + metadata);
+        //metadataSenderService.sendMetadata(metadata);
     }
 
     public Optional<Mp3File> findById(long id) {
