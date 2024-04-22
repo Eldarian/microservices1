@@ -47,7 +47,7 @@ public class Mp3FileService {
             return fileId;
     }
 
-    protected String getMetadata(byte[] fileData, long resourceID) throws IOException, TikaException, SAXException {
+    protected String getMetadata(byte[] fileData, long resourceId) throws IOException, TikaException, SAXException {
             File tempFile = File.createTempFile("temp-", ".mp3");
             try(FileOutputStream fileOutputStream = new FileOutputStream(tempFile)) {
                 fileOutputStream.write(fileData);
@@ -60,7 +60,7 @@ public class Mp3FileService {
                 mp3Parser.parse(input, handler, metadata);
             }
 
-            metadata.add("resourceID", String.valueOf(resourceID));
+            metadata.add("resourceId", String.valueOf(resourceId));
 
             StringWriter writer = new StringWriter();
             JsonMetadata.toJson(metadata, writer);

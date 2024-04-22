@@ -106,6 +106,10 @@ public class Song {
         this.duration = duration;
     }
 
+    public void setDuration(double duration) {
+        this.duration = (int) duration;
+    }
+
     public String getDurationInMinutesAndSeconds() {
         int minutes = duration / 60;
         int seconds = duration % 60;
