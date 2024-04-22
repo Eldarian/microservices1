@@ -5,6 +5,8 @@ import com.eldarian.resourceservice.repository.Mp3FileRepository;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.serialization.JsonMetadata;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
 import org.apache.tika.parser.mp3.Mp3Parser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ public class Mp3FileService {
 
 
     private final Mp3FileRepository mp3FileRepository;
-    private MetadataSenderService metadataSenderService;
+    private final MetadataSenderService metadataSenderService;
 
     @Autowired
     public Mp3FileService(Mp3FileRepository mp3FileRepository, MetadataSenderService metadataSenderService) {
@@ -60,8 +62,8 @@ public class Mp3FileService {
             InputStream input = new FileInputStream(tempFile);
             BodyContentHandler handler = new BodyContentHandler();
             Metadata metadata = new Metadata();
-            Mp3Parser mp3Parser = new Mp3Parser();
-            mp3Parser.parse(input, handler, metadata);
+            Parser mp3Parser = new Mp3Parser();
+            mp3Parser.parse(input, handler, metadata, new ParseContext());
             metadata.add("resourceID", String.valueOf(resourceID));
 
             StringWriter writer = new StringWriter();

@@ -35,7 +35,7 @@ public class MetadataSenderService {
         if (response.getStatusCode().is2xxSuccessful()) {
             System.out.println("Metadata sent successfully");
         } else {
-            System.out.println("Failed to send metadata. Status code: " + response.getStatusCodeValue());
+            System.out.println("Failed to send metadata. Status code: " + response.getStatusCode());
         }
     }
 }
