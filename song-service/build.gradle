@@ -38,6 +38,6 @@ tasks.named('test') {
 }
 
 bootJar {
-    archiveFileName = 'resource-service.jar'
+    archiveFileName = 'song-service.jar'
     archiveVersion = '0.0.1-SNAPSHOT'
 }

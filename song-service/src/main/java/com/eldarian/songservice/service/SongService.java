@@ -36,7 +36,7 @@ public class SongService {
             try {
                 song.setYear(Integer.parseInt(releaseDate));
             } catch (NumberFormatException e) {
-
+                song.setYear(0);
             }
         });
 
