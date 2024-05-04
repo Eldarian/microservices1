@@ -1,0 +1,4 @@
+CREATE TABLE mp3file (
+    id SERIAL PRIMARY KEY,
+    fileData BYTEA NOT NULL
+);

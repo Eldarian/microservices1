@@ -9,6 +9,8 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.parser.mp3.Mp3Parser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @Service
 public class Mp3FileService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Mp3FileService.class);
 
     private final Mp3FileRepository mp3FileRepository;
     private final MetadataSenderService metadataSenderService;
@@ -73,7 +76,7 @@ public class Mp3FileService {
     }
 
     private void sendMetadata(String metadata) {
-        System.out.println("Sending metadata: " + metadata);
+        LOGGER.info("Sending metadata: " + metadata);
         metadataSenderService.sendMetadata(metadata);
     }
 

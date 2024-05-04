@@ -4,6 +4,8 @@ package com.eldarian.resourceservice.controller;
 import com.eldarian.resourceservice.model.Mp3File;
 import com.eldarian.resourceservice.service.Mp3FileService;
 import org.apache.tika.exception.TikaException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,8 @@ public class Mp3Controller {
 
     private final Mp3FileService mp3FileService;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Mp3Controller.class);
+
     @Autowired
     public Mp3Controller(Mp3FileService mp3FileService) {
         this.mp3FileService = mp3FileService;
@@ -29,7 +33,7 @@ public class Mp3Controller {
     @PostMapping("/resources")
     public ResponseEntity<String> uploadMp3(@RequestParam("file") MultipartFile file) {
         //TODO implement file validation to distinct server errors from client errors
-        System.out.println("Received file: " + file.getOriginalFilename());
+        LOGGER.info("Received file: " + file.getOriginalFilename());
         try {
 
             long id = mp3FileService.processMp3File(file);
