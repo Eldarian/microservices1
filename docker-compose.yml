@@ -1,23 +1,38 @@
 version: "3.8"
 services:
+
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - 8761:8761
+    env_file:
+      - ./eureka-server/.env
+    deploy:
+      resources:
+        limits:
+          memory: 512M
   song-service:
     build:
       context: ./song-service
       dockerfile: Dockerfile
     depends_on:
-      song-db:
-        condition: service_healthy
+    - song-db
+    - eureka-server
     ports:
       - 8081:8081
     env_file:
       - ./song-service/.env
+    deploy:
+      replicas: 2
   resourceservice:
     build:
       context: ./resourceservice
       dockerfile: Dockerfile
     depends_on:
-      resource-db:
-        condition: service_healthy
+      - resource-db
+      - eureka-server
     ports:
       - 8080:8080
     deploy:

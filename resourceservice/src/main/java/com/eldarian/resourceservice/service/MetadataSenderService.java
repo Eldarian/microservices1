@@ -12,11 +12,9 @@ import org.springframework.web.client.RestTemplate;
 public class MetadataSenderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MetadataSenderService.class);
-
+    private final RestTemplate restTemplate;
     @Value("${songservice.baseAddress}")
     private String songServiceAddress;
-
-    private final RestTemplate restTemplate;
 
     @Autowired
     public MetadataSenderService(RestTemplate restTemplate) {
