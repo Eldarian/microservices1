@@ -1,6 +1,9 @@
 package com.eldarian.songservice.controller;
 
 import com.eldarian.songservice.service.SongService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import java.util.stream.Collectors;
 public class SongServiceController {
 
     SongService songService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(SongServiceController.class);
 
     @Autowired
     public SongServiceController(SongService songService) {
@@ -24,7 +28,7 @@ public class SongServiceController {
     @PostMapping("/songs")
     public ResponseEntity<String> uploadSong(@RequestBody String jsonMetadata) {
         try {
-            System.out.println(jsonMetadata);
+            LOGGER.info(jsonMetadata);
             long songId = songService.processMetadata(jsonMetadata);
             return ResponseEntity.ok("{\"id\": " + songId + "}");
         } catch (IOException e) {

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 import org.xml.sax.SAXException;
@@ -18,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class Mp3FileServiceTest {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Mp3FileServiceTest.class);
     @Mock
     private Mp3FileRepository mp3FileRepository;
 
@@ -39,7 +42,7 @@ class Mp3FileServiceTest {
         long resourceID = 1L;
 
         String result = mp3FileService.getMetadata(fileData, resourceID);
-        System.out.println(result);
+        LOGGER.info(result);
         // Now you can make assertions about the result
         assertNotNull(result);
         assertTrue(result.contains("title"));

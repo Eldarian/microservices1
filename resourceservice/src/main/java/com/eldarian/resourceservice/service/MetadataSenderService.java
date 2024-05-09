@@ -1,5 +1,7 @@
 package com.eldarian.resourceservice.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -8,6 +10,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class MetadataSenderService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MetadataSenderService.class);
 
     @Value("${songservice.baseAddress}")
     private String songServiceAddress;
@@ -33,9 +37,9 @@ public class MetadataSenderService {
 
         // Processing the response if needed
         if (response.getStatusCode().is2xxSuccessful()) {
-            System.out.println("Metadata sent successfully");
+            LOGGER.info("Metadata sent successfully");
         } else {
-            System.out.println("Failed to send metadata. Status code: " + response.getStatusCode());
+            LOGGER.info("Failed to send metadata. Status code: " + response.getStatusCode());
         }
     }
 }
