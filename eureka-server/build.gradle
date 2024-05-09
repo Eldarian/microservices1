@@ -21,7 +21,6 @@ ext {
 
 dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
@@ -33,4 +32,9 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+bootJar {
+	archiveFileName = 'eureka-service.jar'
+	archiveVersion = '0.0.1-SNAPSHOT'
 }

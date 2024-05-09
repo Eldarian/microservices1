@@ -13,7 +13,10 @@ services:
       resources:
         limits:
           memory: 512M
-  song-service:
+    networks:
+      - mynetwork
+    hostname: eureka-server
+  song-service-1:
     build:
       context: ./song-service
       dockerfile: Dockerfile
@@ -24,8 +27,27 @@ services:
       - 8081:8081
     env_file:
       - ./song-service/.env
-    deploy:
-      replicas: 2
+    networks:
+      - mynetwork
+    links:
+    - "eureka-server"
+
+  song-service-2:
+    build:
+      context: ./song-service
+      dockerfile: Dockerfile
+    depends_on:
+    - song-db
+    - eureka-server
+    ports:
+      - 8082:8081
+    env_file:
+      - ./song-service/.env
+    networks:
+      - mynetwork
+    links:
+    - "eureka-server"
+   
   resourceservice:
     build:
       context: ./resourceservice
@@ -41,6 +63,11 @@ services:
           memory: 512M
     env_file:
       - ./resourceservice/.env
+    networks:
+      - mynetwork
+    links:
+    - "eureka-server"
+    
 
   song-db:
     image: postgres:alpine
@@ -56,6 +83,8 @@ services:
       interval: 30s
       timeout: 30s
       retries: 3
+    networks:
+      - mynetwork
   resource-db:
     image: postgres:alpine
     ports:
@@ -69,3 +98,8 @@ services:
       interval: 30s
       timeout: 30s
       retries: 3
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork: {}
